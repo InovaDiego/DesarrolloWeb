@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulario → PDF</title>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+  :root { --bg:#f0f2f5; --card:#fff; --ink:#222; --accent:#0077cc; }
+  body { margin:0; font-family:Arial,sans-serif; background:var(--bg); color:var(--ink); display:flex; justify-content:center; padding:30px; }
+  .wrap{ max-width:900px; width:100%; display:grid; gap:24px; }
+  h1{ margin:0; font-size:1.8rem; color:var(--accent);}
+  .grid{ display:grid; gap:20px; grid-template-columns: 1fr; }
+  @media(min-width:860px){ .grid{ grid-template-columns:1.5fr 1fr; } }
+  .card{ background:var(--card); padding:20px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+  label{ display:block; margin:8px 0 6px; font-weight:600; }
+  input, select, textarea{ width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:8px; font-size:0.95rem;}
+  textarea{ min-height:120px; resize:vertical; }
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .btns{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+  button{ padding:10px 16px; border:none; border-radius:10px; cursor:pointer; font-weight:700; }
+  .primary{ background:var(--accent); color:#fff; }
+  .ghost{ background:#e0e0e0; color:#333; }
+  canvas{ width:100%; height:140px; border:1px dashed #aaa; border-radius:8px; background:#fff; }
+  .hint{ font-size:0.82rem; color:#555; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Formulario → PDF</h1>
+<div class="grid">
+<form id="formulario" class="card" autocomplete="off">
+  <label>Nombre (máx.80)</label>
+  <input id="nombre" type="text" maxlength="80" required placeholder="Ej. Juan Pérez">
+  
+  <label>Correo</label>
+  <input id="correo" type="email" required placeholder="ejemplo@correo.com">
+  
+  <div class="row">
+    <div>
+      <label>Tipo de correo</label>
+      <select id="tipoCorreo" required>
+        <option value="" disabled selected>Selecciona</option>
+        <option>Gmail</option><option>Hotmail</option><option>Outlook</option><option>Yahoo</option><option>Institucional</option>
+      </select>
+    </div>
+    <div>
+      <label>Empresa</label>
+      <input id="empresa" placeholder="Ej. ACME S.A. de C.V.">
+    </div>
+  </div>
+  
+  <label>Texto</label>
+  <textarea id="texto" placeholder="Escribe tu mensaje..."></textarea>
+  
+  <label>Logo (opcional)</label>
+  <input id="logo" type="file" accept="image/*">
+  
+  <label>Firma</label>
+  <canvas id="canvasFirma"></canvas>
+  
+  <div class="btns">
+    <button type="button" class="ghost" id="borrarFirma">Borrar firma</button>
+    <button type="submit" class="primary">Generar PDF</button>
+  </div>
+</form>
+
+<aside class="card">
+<h3>Notas rápidas</h3>
+<p class="hint">El PDF incluirá nombre, correo, texto, empresa, logo y tu firma si la dibujas. Todo se procesa en el navegador.</p>
+</aside>
+</div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvasFirma');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas(){
+  const ratio = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * ratio;
+  canvas.height = canvas.clientHeight * ratio;
+  ctx.scale(ratio, ratio);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,canvas.clientWidth, canvas.clientHeight);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+let dibujando = false, prev = null;
+function getPos(e){
+  const rect = canvas.getBoundingClientRect();
+  const x = e.touches ? e.touches[0].clientX : e.clientX;
+  const y = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: x - rect.left, y: y - rect.top };
+}
+canvas.addEventListener('mousedown', e=>{ dibujando=true; prev=getPos(e); });
+canvas.addEventListener('mousemove', e=>{ if(!dibujando) return; e.preventDefault(); const p=getPos(e); ctx.beginPath(); ctx.moveTo(prev.x,prev.y); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#111'; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.stroke(); prev=p; });
+window.addEventListener('mouseup', ()=>dibujando=false);
+canvas.addEventListener('touchstart', e=>{ dibujando=true; prev=getPos(e); }, {passive:false});
+canvas.addEventListener('touchmove', e=>{ if(!dibujando) return; e.preventDefault(); const p=getPos(e); ctx.beginPath(); ctx.moveTo(prev.x,prev.y); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#111'; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.stroke(); prev=p; }, {passive:false});
+window.addEventListener('touchend', ()=>dibujando=false);
+
+document.getElementById('borrarFirma').addEventListener('click', ()=>{
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  resizeCanvas();
+});
+
+document.getElementById('formulario').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const nombre = document.getElementById('nombre').value.trim();
+  const correo = document.getElementById('correo').value.trim();
+  const tipo = document.getElementById('tipoCorreo').value;
+  const empresa = document.getElementById('empresa').value.trim();
+  const texto = document.getElementById('texto').value.trim();
+  const logoEl = document.getElementById('logo');
+  if(!nombre||!correo||!tipo){ alert('Completa nombre, correo y tipo'); return; }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({unit:'pt', format:'letter'});
+  const left=50, top=50, lineGap=18;
+  const pageW = pdf.internal.pageSize.getWidth();
+
+  // Logo
+  if(logoEl.files[0]){
+    const dataUrl = await new Promise(res=>{
+      const fr=new FileReader();
+      fr.onload=()=>res(fr.result); fr.readAsDataURL(logoEl.files[0]);
+    });
+    const img = new Image(); img.src=dataUrl; await img.decode();
+    const maxH=50; const scale=maxH/img.naturalHeight; const w=img.naturalWidth*scale;
+    pdf.addImage(dataUrl,'PNG',left,top,w,maxH);
+  }
+
+  pdf.setFontSize(14); pdf.setFont('helvetica','bold');
+  pdf.text(`Empresa: ${empresa||'Empresa'}`, pageW-50, top+15, { align:'right' });
+  pdf.text('Ficha de Contacto', left, top+60);
+  pdf.setFont('helvetica','bold');
+  pdf.text('Nombre:', left, top+80); pdf.setFont('helvetica','normal'); pdf.text(nombre,left+70,top+80);
+  pdf.setFont('helvetica','bold'); pdf.text('Correo:', left, top+80+lineGap); pdf.setFont('helvetica','normal'); pdf.text(`${correo} (${tipo})`, left+70, top+80+lineGap);
+
+  const boxTop = top+80+lineGap*2+10; const boxW = pageW-left*2; const boxH=220;
+  pdf.setDrawColor(180); pdf.setLineWidth(0.8);
+  pdf.roundedRect(left,boxTop,boxW,boxH,6,6);
+  pdf.setFont('helvetica','bold'); pdf.text('Texto:', left+8, boxTop+18);
+  pdf.setFont('helvetica','normal'); pdf.text(pdf.splitTextToSize(texto||'—', boxW-20), left+8, boxTop+38);
+
+  // Firma
+  const firmaData = canvas.toDataURL('image/png');
+  if(atob(firmaData.split(',')[1]).length>1500){
+    pdf.addImage(firmaData,'PNG',left,boxTop+boxH+10,180,70);
+    pdf.setFontSize(10); pdf.text('Firma', left+8, boxTop+boxH);
+  }
+
+  // Marca de agua
+  pdf.setGState(new pdf.GState({ opacity:0.08 }));
+  pdf.setFontSize(60); pdf.setFont('helvetica','bold'); pdf.setTextColor(100);
+  pdf.text('Marca de agua', pageW/2, 400, { angle:-30, align:'center' });
+  pdf.setGState(new pdf.GState({ opacity:1 }));
+
+  pdf.save(`ficha_${nombre.replace(/[^\w]/g,'_')}.pdf`);
+});
+</script>
+</body>
+</html>
