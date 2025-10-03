@@ -20,14 +20,14 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+/* En este body cambiamos el fondo blanco de manera general*/
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-dark);
     scroll-behavior: smooth;
-    background-color: var(--primary-color);
-    color: var(--text-dark);
+     background-color: #ffffff; /* fondo blanco real */
+    color: var(--primary-color); /* texto oscuro */
 }
 
 .navbar {
@@ -52,21 +52,28 @@ body {
 }
 
 .hero-section {
-  background: linear-gradient(135deg, #1E1B29 0%, #2A2A40 100%);
-    color: white;
+  background-color: #ffffff; /* blanco simple */
+    color: var(--primary-color);
     padding-top: 80px;
+    padding-bottom: 80px;
+    text-align: center;
 }
 
 .hero-section h1 {
-    color: white;
+ font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
 }
 
 .hero-section .text-muted {
     color: rgba(255, 255, 255, 0.9) !important;
 }
 
+/* Aqui cambiamos el estilo para que sea mas clean y minimalista */
 .hero-section .lead {
-    color: rgba(255, 255, 255, 0.95);
+  font-size: 1.25rem;
+    color: #666;  
 }
 
 .profile-image-container {
@@ -165,7 +172,7 @@ body {
 }
 /* Fondo en las  tarjetas de experiencia */
 .timeline-card {
-  background-color: #FBE28A;  /* Color cremita */
+  background-color: #FFF9E8;  /* Color cremita  claro*/
     color: #1E1B29;             /* Asegura que el texto sea legible */
     border: none;
     border-radius: 10px;
@@ -457,6 +464,18 @@ footer a:hover {
         width: calc(100% - 60px);
         margin-left: 60px !important;
     }
+
+/*  edision de tarjeta de redes profecionales  */
+.social-icons a {
+  display: inline-block;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: translateY(-3px);
+  opacity: 0.8;
+}
 
     .scroll-top-btn {
         width: 45px;
