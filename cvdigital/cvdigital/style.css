@@ -146,7 +146,7 @@ body {
     margin-right: auto;
 }
 
-.timeline-badge {
+.timeline-badge  { 
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -161,6 +161,7 @@ body {
     font-size: 1.5rem;
     z-index: 2;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
 }
 /* Fondo en las  tarjetas de experiencia */
 .timeline-card {
@@ -170,12 +171,13 @@ body {
     border-radius: 10px;
     transition: all 0.3s ease;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);  /* sombra elegante */
+    transform: translateY(-10px); /* se levanta la tarjeta */
 }
 
 .timeline-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-    
+    animation: bounce 0.6s ease;
 }
 
 .timeline-card ul {
@@ -196,7 +198,9 @@ body {
     justify-content: center;
     color: white;
     font-size: 1.8rem;
+    animation: bounce 0.6s ease;
 }
+
 
 .skill-item {
     margin-bottom: 25px;
@@ -461,4 +465,13 @@ footer a:hover {
         bottom: 20px;
         right: 20px;
     }
+}
+/*Aqui añadimos el efecto o animacion rebote para los iconos al solo pasar el mouse */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
