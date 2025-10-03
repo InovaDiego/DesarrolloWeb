@@ -5,6 +5,12 @@
     --text-dark: #F1F1F1;
     --text-light: #A0A0A0;
     --bg-light: #2A2A40;
+    /* Aqui añadi mas colores a la paleta... */
+    --verde: #55F229;
+    --amarillo: #F2EF29;
+    --naranja: #FAB24B;
+    --turquesa: #4BFADD;
+    
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -99,10 +105,18 @@ body {
     background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
     border-radius: 2px;
 }
-
+/* Fondo de la seccion de experiencia */ 
 .timeline {
     position: relative;
-    padding: 20px 0;
+    background-color: #fff;  /* Fondo blanco para toda la sección */
+    padding: 40px 20px;
+    border-radius: 10px;
+    color: var(--primary-color); /* Asegura que el texto sea oscuro */
+}
+#experience {
+  background-color: #ffffff; /* Fondo blanco completo para la sección */
+  padding: 60px 0;           /* Ya lo usas en py-5, esto es opcional si lo controlas por clases */
+  color: var(--primary-color); /* Asegura texto legible */
 }
 
 .timeline::before {
@@ -148,14 +162,14 @@ body {
     z-index: 2;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
+/* Fondo en las  tarjetas de experiencia */
 .timeline-card {
-    width: 45%;
+  background-color: #FBE28A;  /* Color cremita */
+    color: #1E1B29;             /* Asegura que el texto sea legible */
     border: none;
     border-radius: 10px;
     transition: all 0.3s ease;
-    background-color: var(--bg-light);
-    color: var(--text-dark);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);  /* sombra elegante */
 }
 
 .timeline-card:hover {
@@ -171,11 +185,11 @@ body {
 .timeline-card ul li {
     margin-bottom: 8px;
 }
-
+/* Aqui se probara con la nueva paleta de colores en  el background*/
 .education-icon {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    background: linear-gradient(135deg, var(--naranja), var(--turquesa));
     border-radius: 50%;
     display: flex;
     align-items: center;
