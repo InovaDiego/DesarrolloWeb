@@ -1,3 +1,6 @@
+/* =====================
+   PALETA DE COLORES
+===================== */
 :root {
     --primary-color: #1E1B29;
     --secondary-color: #8E44AD;
@@ -5,31 +8,38 @@
     --text-dark: #F1F1F1;
     --text-light: #A0A0A0;
     --bg-light: #2A2A40;
-    /* Aqui añadi mas colores a la paleta... */
     --verde: #55F229;
     --amarillo: #F2EF29;
     --naranja: #FAB24B;
     --turquesa: #4BFADD;
-    
+    --bg-white: #ffffff;
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
-
+/* =====================
+   RESET Y ESTILOS GENERALES
+===================== */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-/* En este body cambiamos el fondo blanco de manera general*/
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-dark);
     scroll-behavior: smooth;
-     background-color: #ffffff; /* fondo blanco real */
-    color: var(--primary-color); /* texto oscuro */
+    background-color: var(--bg-white);
+
+
 }
 
+
+/* =====================
+   NAVEGACIÓN (Navbar osea 
+   parte superior derecha en negro)
+===================== */
 .navbar {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -51,14 +61,9 @@ body {
     color: var(--secondary-color);
 }
 
-.hero-section {
-  background-color: #ffffff; /* blanco simple */
-    color: var(--primary-color);
-    padding-top: 80px;
-    padding-bottom: 80px;
-    text-align: center;
-}
-
+/* =====================
+   SECCIÓN HERO (Portada)
+===================== */
 .hero-section h1 {
  font-size: 3rem;
     font-weight: 700;
@@ -70,7 +75,7 @@ body {
     color: rgba(255, 255, 255, 0.9) !important;
 }
 
-/* Aqui cambiamos el estilo para que sea mas clean y minimalista */
+
 .hero-section .lead {
   font-size: 1.25rem;
     color: #666;  
@@ -92,6 +97,10 @@ body {
     transform: scale(1.05);
 }
 
+
+/* =====================
+   SECCIONES: TÍTULOS Y DECORACIONES
+===================== */
 .section-title {
     font-weight: 700;
     font-size: 2.5rem;
@@ -112,7 +121,10 @@ body {
     background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
     border-radius: 2px;
 }
-/* Fondo de la seccion de experiencia */ 
+/* =====================
+   EXPERIENCIA - TIMELINE
+   fondo de seccion
+===================== */
 .timeline {
     position: relative;
     background-color: #fff;  /* Fondo blanco para toda la sección */
@@ -194,7 +206,9 @@ body {
 .timeline-card ul li {
     margin-bottom: 8px;
 }
-/* Aqui se probara con la nueva paleta de colores en  el background*/
+/* =====================
+   ICONOS DE EDUCACIÓN
+===================== */
 .education-icon {
     width: 60px;
     height: 60px;
@@ -208,7 +222,9 @@ body {
     animation: bounce 0.6s ease;
 }
 
-
+/* =====================
+   HABILIDADES Y PROGRESOS
+===================== */
 .skill-item {
     margin-bottom: 25px;
 }
@@ -261,6 +277,9 @@ body {
     box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
 }
 
+/* =====================
+   PROYECTOS
+===================== */
 .project-card {
     text-align: center;
     padding: 30px;
@@ -293,6 +312,9 @@ body {
     margin-bottom: 10px;
 }
 
+/* =====================
+   CONTACTO
+===================== */
 .contact-item {
     padding: 20px;
     background-color: var(--bg-light);
@@ -334,6 +356,9 @@ body {
     color: var(--accent-color);
 }
 
+/* =====================
+   REDES SOCIALES
+===================== */
 .social-links .btn {
     transition: all 0.3s ease;
 }
@@ -343,6 +368,9 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* =====================
+   FOOTER
+===================== */
 footer {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -355,7 +383,9 @@ footer a:hover {
     transform: translateY(-3px);
     opacity: 0.8;
 }
-
+/* =====================
+   SCROLL FLECHA DE COLOR
+===================== */
 .scroll-top-btn {
     position: fixed;
     bottom: 30px;
@@ -386,7 +416,9 @@ footer a:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
-
+/* =====================
+   ANIMACIONES
+===================== */
 .fade-in {
     animation: fadeIn 1s ease-out;
 }
@@ -422,6 +454,31 @@ footer a:hover {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
+ .hero-section {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent; /* <-- importante, que no tape el GIF */
+    }
+
+.hero-section::before {
+   content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("imagenes/fondo_3d.gif") center center / cover no-repeat;
+    opacity: 0.2;        /* transparencia para que no interfiera */
+    z-index: 0;           /* cualquier número positivo menor que el contenido */
+    pointer-events: none;
+}
+
+    .hero-section .container {
+    position: relative;
+    z-index: 1;
+    }
+
+
 @media (max-width: 991px) {
     .timeline::before {
         left: 30px;
@@ -441,10 +498,10 @@ footer a:hover {
         font-size: 2rem;
     }
 
-    .hero-section {
-        padding-top: 100px;
-        text-align: center;
-    }
+   
+
+
+
 
     .hero-section h1 {
         font-size: 2.5rem;
@@ -492,5 +549,72 @@ footer a:hover {
   }
   50% {
     transform: translateY(-10px);
+  }
+
+  
+}
+/* === DECORACIONES ADICIONALES === */
+
+/* Imagen en Experiencia Profesional */
+.decoracion-experiencia {
+    position: absolute;
+    left: 5%;
+    top: 1450px; /* ajusta según tu estructura */
+    width: 100px;
+    opacity: 0.8;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Imagen en Habilidades */
+.decoracion-habilidades {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 2100px; /* ajusta según tu layout */
+    width: 120px;
+    opacity: 0.8;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Imagen en Contacto */
+.decoracion-contacto {
+    position: absolute;
+    right: 5%;
+    top: 2900px; /* ajusta según el tamaño del contenido */
+    width: 90px;
+    opacity: 0.8;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .decoracion-experiencia,
+    .decoracion-habilidades,
+    .decoracion-contacto {
+        width: 60px;
+        opacity: 0.6;
+    }
+}
+
+/*Fondo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #F1F1F1;
+    --text-dark: #1E1B29;
+    --bg-light: #121212;
+    --shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+  }
+
+  .timeline-card {
+    background-color: #1E1E2E;
+    color: #FFF;
   }
 }
